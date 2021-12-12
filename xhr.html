@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+</head>
+<body>
+<h2>Peticiones Asíncronas y consumo de JSON</h2>
+<h3>Alumno: Álvarez Carranza Alejandro Cruz</h3>
+<div id="demo">
+<input type="text" id="textPais" value="canada">
+<button type="button" onclick="primerFetch()">Nombre País</button>
+Puede Ingresar:("japan","mexico","germany","united states")
+<br><br>
+<input type="text" id="banderaPais" value="ca">
+<button type="button" onclick="loadXMLDoc()">Bandera País</button>
+Puede Ingresar:("mx","ar","jp","gm","ca")
+</div>
+
+<script>
+function primerFetch(){
+  textoPais = document.getElementById("textPais").value;
+  fetch('https://restcountries.com/v3.1/name/'+textoPais)
+    .then(response => response.json())
+    .then(function(data) {
+      //console.log(data[0].name.common);
+      body = document.getElementsByTagName("body")[0];
+      pais = document.createElement('h1');
+      oficial = Object.values(data[0].name.nativeName);
+      console.log(oficial[0].official);
+      pais.innerHTML = "Nombre País: "+data[0].name.common+" - "+data[0].flag+" - "+oficial[0].official;      
+      capital = document.createElement('h2');
+      capital.innerHTML = "Capital: "+data[0].capital;
+      body.appendChild(pais);
+      body.appendChild(capital);
+    });
+}
+function loadXMLDoc(){
+  banderaPais = document.getElementById("banderaPais").value;
+  fetch('https://flagcdn.com/'+banderaPais+'.svg')
+    .then(res => res.blob()) 
+    .then(blob => {
+      let banderaURL = URL.createObjectURL(blob);
+      let banderaImagen = new Image();
+      banderaImagen.src = banderaURL;
+      document.getElementsByTagName('body')[0].appendChild(banderaImagen);
+  });
+}
+</script>
+
+</body>
+</html>
